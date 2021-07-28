@@ -29,15 +29,15 @@ export default function Projects({ data }) {
 
 export const query = graphql`
     query ProjectsPage {
-        allMarkdownRemark {
-        nodes {
-            frontmatter {
-            slug
-            stack
-            title
+        allMarkdownRemark(sort: {fields: frontmatter___date, order: DESC}) {
+            nodes {
+              frontmatter {
+                slug
+                stack
+                title
+              }
+              id
             }
-            id
-        }
         }
     }
 `
