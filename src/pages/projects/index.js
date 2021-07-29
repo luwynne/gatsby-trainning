@@ -2,10 +2,12 @@ import React from 'react'
 import Layout from '../../components/Layout'
 import styles from '../../styles/projects.css'
 import { graphql, Link } from 'gatsby'
+import Img from 'gatsby-image'
 
 export default function Projects({ data }) {
 
-    const projects = data.allMarkdownRemark.nodes;
+    const projects = data.projects.nodes;
+    const contact = data.contact.siteMetadata.contact;
 
     return (
         <Layout>
@@ -16,12 +18,14 @@ export default function Projects({ data }) {
                     { projects.map(project => (
                         <Link to={"/projects/" + project.frontmatter.slug} key={project.id}>
                             <div>
+                                <Img fluid={project.frontmatter.thumb.childImageSharp.fluid} />
                                 <h3>{project.frontmatter.title}</h3>
                                 <p>{project.frontmatter.stack}</p>
                             </div>
                         </Link>
                     )) }
                 </div>
+                <p>Like what you see? Email me at {contact} for a quote.</p>
             </div>
         </Layout>
     )
@@ -29,14 +33,26 @@ export default function Projects({ data }) {
 
 export const query = graphql`
     query ProjectsPage {
-        allMarkdownRemark(sort: {fields: frontmatter___date, order: DESC}) {
+        projects: allMarkdownRemark(sort: {fields: frontmatter___date, order: DESC}) {
             nodes {
               frontmatter {
                 slug
                 stack
                 title
+                thumb{
+                    childImageSharp{
+                        fluid{
+                            ...GatsbyImageSharpFluid
+                        }
+                    }
+                }
               }
               id
+            }
+        }
+        contact: site{
+            siteMetadata{
+                contact
             }
         }
     }

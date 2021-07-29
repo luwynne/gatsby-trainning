@@ -2,10 +2,11 @@ import React from "react"
 import Layout from "../components/Layout"
 import styles from '../styles/home.css'
 import { graphql, Link } from 'gatsby'
+import Img from 'gatsby-image'
 
-export default function Home() {
+export default function Home({ data }) {
   
-  //const { title, description } = data.site.siteMetadata
+  console.log(data);
 
   return(
     <Layout>
@@ -16,19 +17,19 @@ export default function Home() {
           <p>Building new pages</p>
           <Link to="/projects" className="btn">My Portfolio project</Link>
         </div>
-        <img src="/banner.png" alt="site banner" style={{maxWidth: '100%'}}/>
+        <Img fluid={data.file.childImageSharp.fluid} />
       </section>
     </Layout>
   )
 }
 
-// export const query = graphql`
-//   query SiteInfo {
-//     site {
-//       siteMetadata {
-//         copyright
-//         description
-//         title
-//       }
-//     }
-//   }`
+export const query = graphql`
+  query Banner {
+    file(relativePath: {eq: "banner.png"}){
+      childImageSharp{
+        fluid{
+          ...GatsbyImageSharpFluid
+        }
+      }
+    }
+  }`
